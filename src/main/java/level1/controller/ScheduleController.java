@@ -92,6 +92,7 @@ public class ScheduleController {
     }
 
 
+
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
 
@@ -109,6 +110,88 @@ public class ScheduleController {
         }
 
         return new ResponseEntity<>(scheduleList.get(0), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(
+            @PathVariable Long id, @RequestBody ScheduleRequestDto requestDto
+    ) {
+
+        String name = requestDto.getName();
+        String todo = requestDto.getTodo();
+
+        // DB에서 해당 ID의 schedule을 조회
+        List<ScheduleResponseDto> scheduleList = jdbcTemplate.query("SELECT * FROM schedule WHERE id = ?", new Object[]{id}, (rs, rowNum) ->
+                new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("pwd"),
+                        rs.getString("todo"),
+                        rs.getString("createdAt"),
+                        rs.getString("updatedAt")
+                ));
+
+        if (scheduleList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+
+        if (scheduleList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ScheduleResponseDto scheduleFromDb = scheduleList.get(0);
+
+        String now = LocalDateTime.now().toString();
+
+        if (scheduleFromDb.getPwd().equals(requestDto.getPwd())) {
+            jdbcTemplate.update(
+                    "update schedule set todo = ?, name = ?, updatedAt = ? where id = ?",
+                    requestDto.getTodo(),
+                    requestDto.getName(),
+                    now,
+                    id
+            );
+            ScheduleResponseDto result = new ScheduleResponseDto(id, requestDto.getName(), requestDto.getTodo(),
+                                                                requestDto.getUpdatedAt(), now);
+
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            // 패스워드가 일치하지 않으면 Unauthorized 상태 반환
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
+
+        // DB에서 해당 ID의 schedule을 조회
+        List<ScheduleResponseDto> scheduleList = jdbcTemplate.query("SELECT * FROM schedule WHERE id = ?", new Object[]{id}, (rs, rowNum) ->
+                new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("pwd"),
+                        rs.getString("todo"),
+                        rs.getString("createdAt"),
+                        rs.getString("updatedAt")
+                ));
+
+        // DB에서 조회된 schedule이 없으면 NOT_FOUND 반환
+        if (scheduleList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ScheduleResponseDto scheduleFromDb = scheduleList.get(0);
+
+        if (scheduleFromDb.getPwd().equals(requestDto.getPwd())){
+            jdbcTemplate.update(
+                    "delete from schedule where id = ?",
+                    id
+            );
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
