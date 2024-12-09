@@ -131,19 +131,17 @@ public class ScheduleController {
                         rs.getString("updatedAt")
                 ));
 
+        // Lv 5. 예외 처리: 선택한 일정 정보를 조회할 수 없을 때
         if (scheduleList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-
-        if (scheduleList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         ScheduleResponseDto scheduleFromDb = scheduleList.get(0);
 
         String now = LocalDateTime.now().toString();
 
+        // Lv 5. 예외 처리: 비밀번호가 일치하지 않을 때
         if (scheduleFromDb.getPwd().equals(requestDto.getPwd())) {
             jdbcTemplate.update(
                     "update schedule set todo = ?, name = ?, updatedAt = ? where id = ?",
@@ -157,7 +155,7 @@ public class ScheduleController {
 
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-            // 패스워드가 일치하지 않으면 Unauthorized 상태 반환
+
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
@@ -176,13 +174,15 @@ public class ScheduleController {
                         rs.getString("updatedAt")
                 ));
 
-        // DB에서 조회된 schedule이 없으면 NOT_FOUND 반환
+        // Lv 5. 예외 처리: 선택한 일정 정보를 조회할 수 없을 때
         if (scheduleList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         ScheduleResponseDto scheduleFromDb = scheduleList.get(0);
 
+
+        // Lv 5. 예외 처리: 비밀번호가 일치하지 않을 때
         if (scheduleFromDb.getPwd().equals(requestDto.getPwd())){
             jdbcTemplate.update(
                     "delete from schedule where id = ?",
@@ -190,8 +190,7 @@ public class ScheduleController {
             );
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
 }
