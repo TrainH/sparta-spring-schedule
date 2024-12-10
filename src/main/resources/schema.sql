@@ -1,3 +1,5 @@
+# Lv1. SQL 작성하기: 설치한 데이터베이스(Mysql)에 ERD를 따라 테이블을 생성
+
 CREATE TABLE IF NOT EXISTS schedule (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),

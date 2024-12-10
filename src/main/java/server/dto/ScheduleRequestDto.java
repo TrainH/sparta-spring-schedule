@@ -1,9 +1,6 @@
-package level1.dto;
+package server.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-
-import java.sql.Timestamp;
 
 @Getter
 public class ScheduleRequestDto {
@@ -11,5 +8,6 @@ public class ScheduleRequestDto {
     private String pwd;
     private String todo;
     private String updatedAt;
+
 }
 
