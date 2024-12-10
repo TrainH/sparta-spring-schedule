@@ -111,12 +111,27 @@
     - 사용자가 새로운 일정을 생성
 
 
+https://github.com/user-attachments/assets/19540d1c-af55-4b6e-a785-c3dab31fa9eb
+
+
+
+
 2. **전체 일정 조회**
     - 등록된 모든 일정을 반환
 
 
+https://github.com/user-attachments/assets/560257d3-c8f7-425d-93b6-39efa65c0fd3
+
+
+
+
+
 3. **선택 일정 조회**
     - 특정 ID를 기준으로 일정을 조회
+
+https://github.com/user-attachments/assets/62c1085a-60be-4170-ba76-179b6f729170
+
+
 
 ---
 
@@ -125,9 +140,17 @@
 1. **선택한 일정 수정**
     - 특정 ID의 일정을 수정
 
+https://github.com/user-attachments/assets/ec4dd837-6eca-4335-9ba6-0cd5eb2cb883
+
+
+
     
 2. **선택한 일정 삭제**
     - 특정 ID의 일정을 삭제
+
+
+https://github.com/user-attachments/assets/9eddc566-df77-4943-b3c8-d75099738c88
+
 
 
 ---
